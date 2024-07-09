@@ -4,48 +4,29 @@ final class MovieQuizViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let currentQuestion = questions[currentQuestionIndex]
-        let currentData = convert(model: currentQuestion)
-        
-        //загрузим показ первого вопроса
-        show(quiz: QuizStepViewModel(
-            image: currentData.image,
-            question: currentData.question,
-            questionNumber: currentData.questionNumber))
+        showQuestion(currentIndex: currentQuestionIndex)
     }
     
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
     
-    // для поиска вопроса в массие моковых данных questions
     private var currentQuestionIndex = 0
-    
-    // счётчиком правильных ответов
     private var correctAnswers = 0
     
-    struct QuizQuestion {
-        // строка с названием фильма,
-        // совпадает с названием картинки афиши фильма в Assets
+    private struct QuizQuestion {
         let image: String
-        // строка с вопросом о рейтинге фильма
         let text: String
-        // булевое значение (true, false), правильный ответ на вопрос
         let correctAnswer: Bool
     }
     
-    // вью модель для состояния "Вопрос показан"
-    struct QuizStepViewModel {
-        // картинка с афишей фильма с типом UIImage
+    private struct QuizStepViewModel {
         let image: UIImage
-        // вопрос о рейтинге квиза
         let question: String
-        // строка с порядковым номером этого вопроса (ex. "1/10")
         let questionNumber: String
     }
     
-    // для состояния "Результат квиза"
-    struct QuizResultsViewModel {
+    private struct QuizResultsViewModel {
       // строка с заголовком алерта
       let title: String
       // строка с текстом о количестве набранных очков
@@ -103,12 +84,10 @@ final class MovieQuizViewController: UIViewController {
         showAnswerResult(isCorrect: true == currentQuestion.correctAnswer)
     }
     
-    
     @IBAction private func noButtonClicked(_ sender: Any) {
         let currentQuestion = questions[currentQuestionIndex]
         showAnswerResult(isCorrect: false == currentQuestion.correctAnswer)
     }
-    
     
     // метод конвертации, который принимает моковый вопрос и возвращает вью модель для экрана вопроса
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -120,11 +99,19 @@ final class MovieQuizViewController: UIViewController {
         return quizStep
     }
     
-    // приватный метод вывода на экран вопроса, принимает вью модель вопроса и ничего не возвращает
+    // приватный метод показа вью модели вопроса по индексу
+    private func showQuestion(currentIndex: Int){
+        let currentQuestion = questions[currentIndex]
+        let currentData = convert(model: currentQuestion)
+        show(quiz: QuizStepViewModel(
+            image: currentData.image,
+            question: currentData.question,
+            questionNumber: currentData.questionNumber))
+    }
+    
     private func show(quiz step: QuizStepViewModel) {
-        
         imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 1
+        imageView.layer.borderWidth = 0
         //imageView.layer.borderColor = UIColor.white.cgColor
         imageView.layer.cornerRadius = 20
         imageView.image = step.image
@@ -132,30 +119,23 @@ final class MovieQuizViewController: UIViewController {
         counterLabel.text = step.questionNumber
     }
     
-    // приватный метод для показа результатов раунда квиза
-    // принимает вью модель QuizResultsViewModel и ничего не возвращает
+    // показ результатов раунда квиза
     private func show(quiz result: QuizResultsViewModel) {
         let alert = UIAlertController(
             title: result.title,
             message: result.text,
             preferredStyle: .alert)
-        
         let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
-            
             let firstQuestion = self.questions[self.currentQuestionIndex]
             let viewModel = self.convert(model: firstQuestion)
             self.show(quiz: viewModel)
         }
-        
         alert.addAction(action)
-        
         self.present(alert, animated: true, completion: nil)
     }
     
-    
-    //метод покрасит рамку
     private func showAnswerResult(isCorrect: Bool){
         imageView.layer.masksToBounds = true // разрешение на рисование рамки
         imageView.layer.borderWidth = 8 // толщина рамки согласно макету
@@ -166,11 +146,9 @@ final class MovieQuizViewController: UIViewController {
             imageView.layer.borderColor = UIColor.ypRed.cgColor
         }
         
-        // запускаем задачу через 1 секунду c помощью диспетчера задач
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             // код, будет вызван через 1 секунду
             self.showNextQuestionOrResults()
-            print("queue works!")
         }
     }
     
@@ -184,22 +162,12 @@ final class MovieQuizViewController: UIViewController {
                 buttonText: "Сыграть еще раз")
             
             show(quiz: viewModel)
-            
         } else { // 2
             currentQuestionIndex += 1
-            let nextQuestion = questions[currentQuestionIndex]
-            let viewModel = convert(model: nextQuestion)
-            show(quiz: viewModel)
+            showQuestion(currentIndex: currentQuestionIndex)
         }
     }
-    
-    
-    
-    
 }
-
-
-
 
 
 /*
