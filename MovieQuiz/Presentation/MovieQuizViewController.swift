@@ -110,7 +110,6 @@ final class MovieQuizViewController: UIViewController {
     }
     
     
-    
     // метод конвертации, который принимает моковый вопрос и возвращает вью модель для экрана вопроса
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let quizStep = QuizStepViewModel(
@@ -126,7 +125,7 @@ final class MovieQuizViewController: UIViewController {
         
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 1
-        imageView.layer.borderColor = UIColor.white.cgColor
+        //imageView.layer.borderColor = UIColor.white.cgColor
         imageView.layer.cornerRadius = 20
         imageView.image = step.image
         textLabel.text = step.question
@@ -155,8 +154,9 @@ final class MovieQuizViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    
+    //метод покрасит рамку
     private func showAnswerResult(isCorrect: Bool){
-        //метод покрасит рамку
         imageView.layer.masksToBounds = true // разрешение на рисование рамки
         imageView.layer.borderWidth = 8 // толщина рамки согласно макету
         if isCorrect{
@@ -168,7 +168,7 @@ final class MovieQuizViewController: UIViewController {
         
         // запускаем задачу через 1 секунду c помощью диспетчера задач
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            // код, который мы хотим вызвать через 1 секунду
+            // код, будет вызван через 1 секунду
             self.showNextQuestionOrResults()
             print("queue works!")
         }
@@ -177,7 +177,7 @@ final class MovieQuizViewController: UIViewController {
     // переход в один из сценариев
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questions.count - 1 { // 1
-            let text = "Ваш результат: \(correctAnswers/10 * 100)%"
+            let text = "Ваш результат: \(correctAnswers)/10"
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
                 text: text,
