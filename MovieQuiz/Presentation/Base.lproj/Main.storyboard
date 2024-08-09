@@ -55,7 +55,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="6bB-QQ-EDj" userLabel="Stack View 2">
                                         <rect key="frame" x="0.0" y="744" width="374" height="60"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oD5-fN-tdg" userLabel="No Button">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oD5-fN-tdg" userLabel="NoButton">
                                                 <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
                                                 <color key="backgroundColor" name="YP White "/>
                                                 <constraints>
@@ -75,7 +75,7 @@
                                                     <action selector="noButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YXO-St-t1l"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8F-Mg-EW2" userLabel="Yes  Button">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8F-Mg-EW2" userLabel="YesButton">
                                                 <rect key="frame" x="197" y="0.0" width="177" height="60"/>
                                                 <color key="backgroundColor" name="YP White "/>
                                                 <constraints>
@@ -115,7 +115,9 @@
                     <connections>
                         <outlet property="counterLabel" destination="W6v-kK-XIx" id="iAs-sN-J0p"/>
                         <outlet property="imageView" destination="Kek-6A-bY5" id="v1O-Tl-X2a"/>
+                        <outlet property="noButton" destination="oD5-fN-tdg" id="UQk-eJ-pue"/>
                         <outlet property="textLabel" destination="bxL-WN-SAh" id="Pgc-Jk-wqi"/>
+                        <outlet property="yesButton" destination="j8F-Mg-EW2" id="c4k-2x-Cgh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
