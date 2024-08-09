@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class AlertPresenter{
+final class AlertPresenter{
     
     weak var viewController: UIViewController?
     weak var delegate: AlertPresenterDelegate?
@@ -23,9 +23,9 @@ class AlertPresenter{
             message: alertView?.message,
             preferredStyle: .alert)
         
-        let action = UIAlertAction(title: alertView?.buttonText, style: .default) { _ in
+        let action = UIAlertAction(title: alertView?.buttonText, style: .default) {[weak self] _ in
             alertView?.completion?()
-            self.delegate?.didPresentAlert()
+            self?.delegate?.didPresentAlert()
         }
         alert.addAction(action)
         viewController?.present(alert, animated: true, completion: nil)

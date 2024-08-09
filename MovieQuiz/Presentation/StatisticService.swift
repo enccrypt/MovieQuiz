@@ -62,14 +62,6 @@ final class StatisticService: StatisticServiceProtocol {
     }
     
     func store(resultOfGame: GameResult) {
-        // Получаем словарь всех значений
-        let allValues = UserDefaults.standard.dictionaryRepresentation()
-
-        // Получаем все ключи словаря, затем в цикле удаляем их
-        allValues.keys.forEach { key in
-            UserDefaults.standard.removeObject(forKey: key)
-        }
-        
         totalAccuracy = 0.0
         let newGamesCount = gamesCount + 1
         gamesCount = newGamesCount

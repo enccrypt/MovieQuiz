@@ -5,9 +5,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
-    @IBOutlet weak var yesButton: UIButton!
-    @IBOutlet weak var noButton: UIButton!
-    
+    @IBOutlet private var yesButton: UIButton!
+    @IBOutlet private var noButton: UIButton!
     
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
@@ -54,26 +53,23 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     }
     
     @IBAction private func yesButtonClicked(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else {
-            print("went wrong")
-            return
-        }
-        yesButton.isEnabled = false
-        noButton.isEnabled = false
-        showAnswerResult(isCorrect: true == currentQuestion.correctAnswer)
+        buttonClicked(true)
     }
     
     @IBAction private func noButtonClicked(_ sender: Any) {
+        buttonClicked(false)
+    }
+    
+    private func buttonClicked(_ buttonValue: Bool){
         guard let currentQuestion = currentQuestion else {
-            print("went wrong")
             return
         }
         yesButton.isEnabled = false
         noButton.isEnabled = false
-        showAnswerResult(isCorrect: false == currentQuestion.correctAnswer)
+        showAnswerResult(isCorrect: buttonValue == currentQuestion.correctAnswer)
+
     }
     
-    // метод конвертации, который принимает моковый вопрос и возвращает вью модель для экрана вопроса
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let quizStep = QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
@@ -83,7 +79,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         return quizStep
     }
     
-    // приватный метод показа вью модели вопроса по индексу
     private func show(currentIndex: Int){
         questionFactory?.requestNextQuestion() // асинхронный вызов фабрики
         
@@ -94,14 +89,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         noButton.isEnabled = true
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 0
-        //imageView.layer.borderColor = UIColor.white.cgColor
         imageView.layer.cornerRadius = 20
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
     
-    // показ результатов раунда квиза
     private func show(quiz result: QuizResultsViewModel) {
         let alert = UIAlertController(
             title: result.title,
@@ -134,7 +127,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             }
         }
 
-    // переход в один из сценариев
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1 { // 1
             let currentDate = Date()
@@ -176,7 +168,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             alertPresenter?.presentAlert(alertView: alertModel)
         } else { // 2
             currentQuestionIndex += 1
-            //show(currentIndex: currentQuestionIndex)}
             questionFactory?.requestNextQuestion() // асинхронный вызов фабрики
             
         }
@@ -186,7 +177,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
 
 /*
  Mock-данные
- 
  
  Картинка: The Godfather
  Настоящий рейтинг: 9,2
