@@ -7,6 +7,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var noButton: UIButton!
+    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
@@ -21,14 +22,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let questionFactory = QuestionFactory(delegate: self)
+        let questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         self.questionFactory = questionFactory
         
         alertPresenter = AlertPresenter(viewController: self)
         alertPresenter?.delegate = self
         
         statisticService = StatisticService(correctAnswersAmount: correctAnswers)
-        
+        showLoadingIndicator()
+        questionFactory.loadData()
         show(currentIndex: currentQuestionIndex)
     }
     
@@ -52,6 +54,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         show(currentIndex: currentQuestionIndex)
     }
     
+    func didLoadDataFromServer() {
+        activityIndicator.isHidden = true
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: any Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+    
     @IBAction private func yesButtonClicked(_ sender: Any) {
         buttonClicked(true)
     }
@@ -70,13 +81,32 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
 
     }
     
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
+        activityIndicator.startAnimating() // включаем анимацию
+    }
+    
+    private func showNetworkError(message: String) {
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+        let alertModel = AlertModel(
+            title: "Ошибка!",
+            message: message,
+            buttonText: "Попробовать еще раз") { [weak self] in
+            guard let self = self else { return }
+            self.currentQuestionIndex = 0
+            self.correctAnswers = 0
+            self.questionFactory?.requestNextQuestion()
+        }
+                                    
+        alertPresenter?.presentAlert(alertView: alertModel)
+    }
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let quizStep = QuizStepViewModel(
-            image: UIImage(named: model.image) ?? UIImage(),
+        return QuizStepViewModel(
+            image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-        
-        return quizStep
     }
     
     private func show(currentIndex: Int){

@@ -13,7 +13,7 @@ struct GameResult {
     let date: Date
     
     func isBiggerThan(_ another: GameResult) -> Bool {
-        correct > another.correct
+        correct >= another.correct
     }
 }
 
