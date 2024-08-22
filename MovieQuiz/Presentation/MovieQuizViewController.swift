@@ -1,15 +1,18 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, MovieQuizViewControllerProtocol {
+    
+    var alertPresenter: AlertPresenter?
+    
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet var yesButton: UIButton!
     @IBOutlet var noButton: UIButton!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
-        
+    
     private var presenter: MovieQuizPresenter!
-    var alertPresenter: AlertPresenter?
+    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -21,14 +24,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, M
         alertPresenter?.delegate = self
     }
     
-    // MARK: - Actions
-    @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        presenter.yesButtonClicked()
-    }
     
-    @IBAction private func noButtonClicked(_ sender: Any) {
-        presenter.noButtonClicked()
-    }
     
     // MARK: - Functions
     func setButtonsEnabled(_ isEnabled: Bool) {
@@ -83,7 +79,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, M
             title: result.title,
             message: result.text,
             preferredStyle: .alert)
-
+        alert.view.accessibilityIdentifier = "GameResultsAlert"
         let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
             guard let self = self else { return }
             self.presenter.restartGame()
@@ -91,6 +87,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, M
         }
         
         alert.addAction(action)
+        alert.view.accessibilityIdentifier = "GameResultsAlert"
         self.present(alert, animated: true, completion: nil)
     }
     
@@ -99,6 +96,14 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, M
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
     }
-
+    
+    // MARK: - Actions
+    @IBAction private func yesButtonClicked(_ sender: UIButton) {
+        presenter.yesButtonClicked()
+    }
+    
+    @IBAction private func noButtonClicked(_ sender: Any) {
+        presenter.noButtonClicked()
+    }
     
 }
