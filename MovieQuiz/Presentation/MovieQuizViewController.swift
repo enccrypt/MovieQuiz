@@ -83,16 +83,14 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, M
             title: result.title,
             message: result.text,
             preferredStyle: .alert)
+
         let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
             guard let self = self else { return }
             self.presenter.restartGame()
             presenter.showModel()
         }
+        
         alert.addAction(action)
-        
-        alert.view.accessibilityIdentifier = "results"
-        alert.actions.first?.accessibilityIdentifier = "RetryButton"
-        
         self.present(alert, animated: true, completion: nil)
     }
     

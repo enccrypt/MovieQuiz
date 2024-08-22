@@ -133,7 +133,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
                 self.restartGame()
                 self.questionFactory?.requestNextQuestion()
             }
-                                        
+            
             self.viewController?.alertPresenter?.presentAlert(alertView: alertModel)
         } else { 
             self.switchToNextQuestion()

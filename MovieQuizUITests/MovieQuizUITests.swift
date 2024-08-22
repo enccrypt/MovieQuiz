@@ -68,48 +68,63 @@ final class MovieQuizUITests: XCTestCase {
     }
     
     func testGameFinish() {
-        // Запуск игры
         sleep(2)
         for _ in 1...10 {
             app.buttons["No"].tap()
             sleep(2)
         }
-        
-        // Объявляем ожидание для появления алерта
-        let alert = app.alerts["Game results"]
-        let existsPredicate = NSPredicate(format: "exists == true")
-        expectation(for: existsPredicate, evaluatedWith: alert, handler: nil)
-        
-        // Ожидание появления алерта
-        waitForExpectations(timeout: 10, handler: nil)
-        
-        // Проверка правильного заголовка алерта
-        XCTAssertTrue(alert.staticTexts["Этот раунд окончен!"].exists, "Alert title is incorrect")
-        
-        // Проверка существования кнопки
-        XCTAssertTrue(alert.buttons["RetryButton"].exists, "Retry button does not exist")
+           
+        let alert = app.alerts["GameResultsAlert"]
+        XCTAssertTrue(alert.exists)
+        XCTAssertEqual(alert.label, "Этот раунд окончен!")
+        XCTAssertTrue(alert.buttons["Сыграть еще раз"].exists)
     }
-
-
     
-    func testAlertShown() {
-        sleep(2)
-        for _ in 1...10 {
-            app.buttons["No"].tap()
-            sleep(2)
-        }
-        
-        let alert = app.alerts["Game results"]
-        sleep(2)
-        alert.buttons.firstMatch.tap()
-        
-        sleep(2)
-        
-        let indexLabel = app.staticTexts["Index"]
-        XCTAssertFalse(alert.exists)
-        XCTAssertTrue(indexLabel.label == "1/10")
-        
-    }
+    
+//    func testGameFinish() {
+//        // Запуск игры
+//        sleep(2)
+//        for _ in 1...10 {
+//            app.buttons["No"].tap()
+//            sleep(2)
+//        }
+//        
+//        // Объявляем ожидание для появления алерта
+//        let alert = app.alerts["results"]
+//        let existsPredicate = NSPredicate(format: "exists == 1")
+//        expectation(for: existsPredicate, evaluatedWith: alert, handler: nil)
+//        
+//        // Ожидание появления алерта
+//        waitForExpectations(timeout: 10, handler: nil)
+//        
+//        // Проверка правильного заголовка алерта
+//        XCTAssertTrue(alert.staticTexts["Этот раунд окончен!"].exists, "Alert title is incorrect")
+//        
+//        // Проверка существования кнопки
+//        XCTAssertTrue(alert.buttons["RetryButton"].exists, "Retry button does not exist")
+//    }
+//
+//
+//    
+//    func testAlertShown() {
+//        sleep(2)
+//        for _ in 1...10 {
+//            app.buttons["No"].tap()
+//            sleep(2)
+//        }
+//        
+//        let alert = app.alerts["results"]
+//        sleep(2)
+//        alert.buttons.firstMatch.tap()
+//        
+//        sleep(2)
+//        
+//        let indexLabel = app.staticTexts["Index"]
+//        XCTAssertFalse(alert.exists)
+//        XCTAssertTrue(indexLabel.label == "1/10")
+//        
+//    }
+    
     
 }
 

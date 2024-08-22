@@ -22,12 +22,14 @@ final class AlertPresenter{
             title: alertView?.title,
             message: alertView?.message,
             preferredStyle: .alert)
-        
+        alert.view.accessibilityIdentifier = "GameResultsAlert"
         let action = UIAlertAction(title: alertView?.buttonText, style: .default) {[weak self] _ in
             alertView?.completion?()
             self?.delegate?.didPresentAlert()
         }
+        
         alert.addAction(action)
+        alert.view.accessibilityIdentifier = "GameResultsAlert"
         viewController?.present(alert, animated: true, completion: nil)
     }
     
