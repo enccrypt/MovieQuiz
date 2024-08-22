@@ -44,6 +44,9 @@ final class MovieQuizUITests: XCTestCase {
         let secondPosterData = secondPoster.screenshot().pngRepresentation
         
         XCTAssertNotEqual(firstPosterData, secondPosterData)
+        sleep(3)
+        let indexLabel = app.staticTexts["Index"]
+        XCTAssertEqual(indexLabel.label, "2/10")
     }
     
     func testNoButton() {
@@ -64,19 +67,30 @@ final class MovieQuizUITests: XCTestCase {
         XCTAssertEqual(indexLabel.label, "2/10")
     }
     
-    func testGameFinish () {
+    func testGameFinish() {
+        // Запуск игры
         sleep(2)
         for _ in 1...10 {
             app.buttons["No"].tap()
             sleep(2)
         }
         
+        // Объявляем ожидание для появления алерта
         let alert = app.alerts["Game results"]
-        sleep(3)
-        XCTAssertTrue(alert.exists)
-        XCTAssertTrue(alert.label == "Этот раунд окончен!")
-        XCTAssertTrue(alert.buttons.firstMatch.label == "Сыграть еще раз")
+        let existsPredicate = NSPredicate(format: "exists == true")
+        expectation(for: existsPredicate, evaluatedWith: alert, handler: nil)
+        
+        // Ожидание появления алерта
+        waitForExpectations(timeout: 10, handler: nil)
+        
+        // Проверка правильного заголовка алерта
+        XCTAssertTrue(alert.staticTexts["Этот раунд окончен!"].exists, "Alert title is incorrect")
+        
+        // Проверка существования кнопки
+        XCTAssertTrue(alert.buttons["RetryButton"].exists, "Retry button does not exist")
     }
+
+
     
     func testAlertShown() {
         sleep(2)
