@@ -40,7 +40,6 @@ final class MovieQuizViewController: UIViewController, AlertPresenterDelegate, M
     func showLoadingIndicator() {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
-        //activityIndicator.hidesWhenStopped
     }
     
     func hideLoadingIndicator() {
